@@ -30,7 +30,7 @@ async function userRegistration(req, res, next) {
             // Creating encrypted password 
             const hashedPassWord = await bcrypt.hash(req.body.password, 12);
             const newUser = new User({
-                userName: req.body.userName,
+                username: req.body.username,
                 email: req.body.email,
                 password: hashedPassWord,
             });
@@ -45,7 +45,7 @@ async function userRegistration(req, res, next) {
     catch (err) {
         //console.log(err.message); //// to figure out if there is any error 
         res.status(400).json({ message: err.message });
-        
+
     }
 
 
