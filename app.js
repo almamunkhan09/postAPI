@@ -43,7 +43,11 @@ app.use(session({
     }),
     cookie: { maxAge: 1000 * 24 * 3600 }
 }));
-app.use(passport.authenticate('session'));
+
+ app.use(passport.initialize());
+ app.use(passport.session());
+
+//app.use(passport.authenticate('session'));
 
 
 
