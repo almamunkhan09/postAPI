@@ -6,7 +6,9 @@ const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const passport = require('passport')
+const passport = require('passport');
+
+const checkLogedIn = require('./middlewares/checkLogedIn');
 
 
 // declaration of enviornmental variables 
@@ -19,6 +21,7 @@ const MONGOURI = process.env.MONGOURI;
 
 const userReg = require('./routes/ userRegistration')
 const login = require('./login')
+const jwtTocken = require('./routes/jwtTocken');
 
 //Setting up ejs
 app.set('view engine', 'ejs');
@@ -73,9 +76,20 @@ app.get('/', (req, res) => {
     res.status(200).json({ success: 'Application is running' });
 });
 
-app.use('/user', userReg);
 
-app.use('/login',login)
+app.get('/protected',checkLogedIn,(req,res)=>{
+
+    const userdetails = {
+        username:  req.username,
+        email: req.email,
+    }
+    res.send(userdetails);
+})
+
+// imported routes 
+app.use('/user', userReg);
+app.use('/login',login);
+app.use('/jwtLogin',jwtTocken);
 
 // initiate the application at port 
 app.listen(PORT, err => {
